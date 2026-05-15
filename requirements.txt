@@ -1,0 +1,14 @@
+# Backend (FastAPI)
+fastapi
+uvicorn
+python-multipart
+
+# Frontend (Streamlit)
+streamlit
+requests
+
+# Machine Learning & Images
+torch
+torchvision
+ultralytics
+Pillow

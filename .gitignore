@@ -1,0 +1,23 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+.env/
+
+# IDE
+.vscode/
+.idea/
+
+# Large model files (IMPORTANT)
+*.pt
+
+# Dataset / heavy files (if any)
+*.zip
+*.rar
+*.tar
+*.gz
+
+# OS
+.DS_Store
