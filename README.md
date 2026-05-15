@@ -21,14 +21,27 @@ An enterprise-grade, full-stack artificial intelligence application designed for
 
 The ecosystem utilizes a decoupled, three-tier architecture engineered for modularity, low-latency execution, and zero-downtime model swap-outs.
 
-   [ Client Layer ]              [ API Middleware Layer ]            [ Deep Learning Layer ]
-┌────────────────────┐            ┌────────────────────┐            ┌──────────────────────┐
-│     Streamlit      │  HTTP POST │      FastAPI       │ PyTorch/CV2│  YOLOv11s Detect     │
-│  "Botanical Field  │───────────>│    Microservice    │───────────>│  (best.pt Weight File)│
-│   Journal" App     │<───────────│ (Lifespan Managed) │<───────────│                      │
-└────────────────────┘ X-Headers  └────────────────────┘            │  YOLOv11s Segment    │
-                       + Stream                                     │  (segmentation_best) │
-                                                                    └──────────────────────┘
+graph LR
+    subgraph Client_Layer [Client Layer]
+        A[Streamlit UI]
+    end
+
+    subgraph API_Middleware [API Middleware Layer]
+        B[FastAPI Microservice]
+        C{Lifespan Manager}
+    end
+
+    subgraph Deep_Learning [Deep Learning Layer]
+        D[YOLOv11s Detect]
+        E[YOLOv11s Segment]
+    end
+
+    A -- "1. Uploads Image (HTTP POST)" --> B
+    B -- "2. Initialization" --> C
+    C -- "3. Load Weights" --> D
+    C -- "4. Load Weights" --> E
+    D & E -- "5. Inference Results" --> B
+    B -- "6. JPEG + X-Predictions" --> A
 
 * **Model Layer (Edge/Inference PyTorch):** Houses fine-tuned YOLOv11s object detection and instance segmentation models.
 * **Inference Pipeline Middle-Tier (FastAPI):** Exposes endpoints via an asynchronous web framework, managing single-instantiation model lifecycles to maintain standard RAM footprints.
