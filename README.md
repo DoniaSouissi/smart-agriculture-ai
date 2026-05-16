@@ -18,30 +18,21 @@ An enterprise-grade, full-stack artificial intelligence application designed for
 ---
 
 ## 🏗 System Architecture
-
 The ecosystem utilizes a decoupled, three-tier architecture engineered for modularity, low-latency execution, and zero-downtime model swap-outs.
 
-graph LR
-    subgraph Client_Layer [Client Layer]
-        A[Streamlit UI]
-    end
+| Step | From | To | Description |
+|------|------|----|-------------|
+| 1 | Streamlit UI | FastAPI Microservice | Uploads image (HTTP POST) |
+| 2 | FastAPI Microservice | Lifespan Manager | Initialization |
+| 3 | Lifespan Manager | YOLOv11s Detect | Load weights |
+| 4 | Lifespan Manager | YOLOv11s Segment | Load weights |
+| 5 | YOLOv11s Detect & Segment | FastAPI Microservice | Inference results |
+| 6 | FastAPI Microservice | Streamlit UI | JPEG + X-Predictions |
 
-    subgraph API_Middleware [API Middleware Layer]
-        B[FastAPI Microservice]
-        C{Lifespan Manager}
-    end
-
-    subgraph Deep_Learning [Deep Learning Layer]
-        D[YOLOv11s Detect]
-        E[YOLOv11s Segment]
-    end
-
-    A -- "1. Uploads Image (HTTP POST)" --> B
-    B -- "2. Initialization" --> C
-    C -- "3. Load Weights" --> D
-    C -- "4. Load Weights" --> E
-    D & E -- "5. Inference Results" --> B
-    B -- "6. JPEG + X-Predictions" --> A
+**Layers:**
+- **Client Layer** — Streamlit UI
+- **API Middleware Layer** — FastAPI Microservice + Lifespan Manager
+- **Deep Learning Layer** — YOLOv11s Detect, YOLOv11s Segment
 
 * **Model Layer (Edge/Inference PyTorch):** Houses fine-tuned YOLOv11s object detection and instance segmentation models.
 * **Inference Pipeline Middle-Tier (FastAPI):** Exposes endpoints via an asynchronous web framework, managing single-instantiation model lifecycles to maintain standard RAM footprints.
