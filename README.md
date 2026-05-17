@@ -99,5 +99,5 @@ During dataset rebuilding and Roboflow generation updates, the system handles a 
 
 ### 1. Clone & Organize Project Workspace
 ```bash
-git clone <repository-url> smart_agriculture_project
+git clone https://github.com/DoniaSouissi/smart-agriculture-ai
 cd smart_agriculture_project
